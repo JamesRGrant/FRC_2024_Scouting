@@ -23,9 +23,12 @@ The Blue Alliance will record overall game outcomes such as total points, cooper
 # Database
 _Lab 8 in the course demonstrates using a SQLLite database.  This is a database in a local file that will disappear when the container is destroyed.  Instead, we used a managed PostgresDB to ensure our data lives on._
 
-The `db` subproject contains scripts to create the schema for the database.  At present, it only has a table to record new scouting records.
+The `db` sub-project contains scripts to create the schema for the database.  At present, it only has a table to record new scouting records.
 
 Other entities (such as event or team) are just strings (using the Blue Alliance conventions).
 
 # API
-The `api` subproject provides read and write endpoints.
+The `api` sub-project provides read and write endpoints.
+
+## How to run
+Follow the README instructions in `db` then `api`.

@@ -52,7 +52,7 @@ To refresh your environment you can either:
 
     `psql -f drop.sql`
 
-2. Or, just run the batch file that runs all 4 of those commands
+2. Or (recommended), just run the batch file that runs all 4 of those commands
 
     Run this once on your account with admin escalation:
     `sudo chmod +x rebuild_all.sh`
