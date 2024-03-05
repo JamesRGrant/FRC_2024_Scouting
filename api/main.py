@@ -15,12 +15,10 @@ POSTGRES_PORT : str = os.getenv("POSTGRES_PORT",5432) # default postgres port is
 POSTGRES_DB : str = os.getenv("POSTGRES_DB","tdd")
 DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
-
 # Connect to the DB and start the API
 conn = psycopg2.connect(DATABASE_URL)
 conn.autocommit = True
 app = FastAPI()
-
 
 @app.get("/")
 async def root():
@@ -66,6 +64,24 @@ async def delete_item(item_id: int):
     return {"message": "Item deleted successfully"}
 
 
+@app.post("/event_team/")
+async def read_item(item: dict):
+    c = conn.cursor()
+    c.execute(("SELECT event_code, team_number, "
+               "AVG(auto_leave) AS auto_leave, AVG(auto_amp) AS auto_amp, AVG(auto_speaker) AS auto_speaker, AVG(auto_amp_fail) AS auto_amp_fail, AVG(auto_speaker_fail) AS auto_speaker_fail, "
+    "AVG(tele_amp) AS tele_amp, AVG(tele_speaker) AS tele_speaker, AVG(tele_speaker_amped) AS tele_speaker_amped, AVG(tele_amp_fail) AS tele_amp_fail, AVG(tele_speaker_fail) AS tele_speaker_fail, AVG(tele_speaker_amped_fail) AS tele_speaker_amped_fail, "
+    "AVG(end_park) AS end_park, AVG(end_hang) AS end_hang, AVG(end_hang_onstage) AS end_hang_onstage, AVG(end_harmony) AS end_harmony, AVG(end_trap) AS end_trap, AVG(end_hang_fail) AS end_hang_fail, AVG(end_trap_fail) AS end_trap_fail, "
+    "AVG(robot_disabled) AS robot_disabled FROM match_team_action WHERE event_code = %s AND team_number = %s "
+    "GROUP BY event_code, team_number"), (item["event_code"], item["team_number"]))
+    rows = c.fetchall()
+
+    # Convert the results to JSON
+    json_data = []
+    for row in rows:
+        json_data.append(dict(zip([column[0] for column in c.description], row)))
+
+    c.close()
+    return json_data
 
 
 # POST: to create data.
