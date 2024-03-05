@@ -15,6 +15,8 @@ POSTGRES_PORT : str = os.getenv("POSTGRES_PORT",5432) # default postgres port is
 POSTGRES_DB : str = os.getenv("POSTGRES_DB","tdd")
 DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
+print(DATABASE_URL)
+
 # Connect to the DB and start the API
 conn = psycopg2.connect(DATABASE_URL)
 conn.autocommit = True
@@ -82,9 +84,3 @@ async def read_item(item: dict):
 
     c.close()
     return json_data
-
-
-# POST: to create data.
-# GET: to read data.
-# PUT: to update data.
-# DELETE: to delete data.

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frc2024api
+  labels:
+    app: frc2024api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frc2024api
+  # pod spec begins here
+  template:
+    metadata:
+      labels:
+        app: frc2024api
+    spec:
+      containers:
+        - name: frc2024api
+          image: registry.digitalocean.com/frc2024/frc2024api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+          - name: POSTGRES_USER
+            value: "scout"
+          - name: POSTGRES_PASSWORD
+            value: "robots"
+          - name: POSTGRES_SERVER
+            value: "db-frc2024-do-user-15752801-0.c.db.ondigitalocean.com"
+          - name: POSTGRES_PORT
+            value: "25060"
+          - name: POSTGRES_DB
+            value: "frc2024"
