@@ -24,9 +24,9 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "FRC Scouting API for 2024 Season"}
 
-@app.get("/match_team_action/{match_team_action_id}")
+@app.get("/match_team_actions/{match_team_action_id}")
 async def read_item(item_id: int):
     c = conn.cursor()
     c.execute("SELECT * FROM match_team_action WHERE match_team_action_id = %s", (item_id,))
@@ -40,3 +40,35 @@ async def read_item(item_id: int):
     c.close()
     return json_data
 
+@app.post("/match_team_actions/")
+async def create_item(item: dict):
+    sql = ("INSERT INTO public.match_team_action "
+    "(event_code, match_code, team_number, "
+    "auto_leave, auto_amp, auto_speaker, auto_amp_fail, auto_speaker_fail, "
+    "tele_amp, tele_speaker, tele_speaker_amped, tele_amp_fail, tele_speaker_fail, tele_speaker_amped_fail, "
+    "end_park, end_hang, end_hang_onstage, end_harmony, end_trap, end_hang_fail, end_trap_fail, "
+    "robot_disabled) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+    c = conn.cursor()
+    c.execute(sql, 
+        (item["event_code"], item["match_code"], item["team_number"],
+          item["auto_leave"], item["auto_amp"], item["auto_speaker"], item["auto_amp_fail"], item["auto_speaker_fail"], 
+          item["tele_amp"], item["tele_speaker"], item["tele_speaker_amped"], item["tele_amp_fail"], item["tele_speaker_fail"], item["tele_speaker_amped_fail"], 
+          item["end_park"], item["end_hang"], item["end_hang_onstage"], item["end_harmony"], item["end_trap"], item["end_hang_fail"], item["end_trap_fail"], 
+          item["robot_disabled"] ))
+    c.close()
+    return {"message": "Item created successfully"}
+
+@app.delete("/match_team_actions/{match_team_action_id}")
+async def delete_item(item_id: int):
+    c = conn.cursor()
+    c.execute("DELETE FROM match_team_action WHERE match_team_action_id = %s", (item_id,))
+    c.close()
+    return {"message": "Item deleted successfully"}
+
+
+
+
+# POST: to create data.
+# GET: to read data.
+# PUT: to update data.
+# DELETE: to delete data.

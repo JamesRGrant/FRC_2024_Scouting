@@ -68,3 +68,4 @@ COMMENT ON COLUMN public.match_team_action.end_trap_fail IS 'Failed attempt to p
 
 COMMENT ON COLUMN public.match_team_action.robot_disabled IS 'Amount of times the robot was disabled';
 GRANT ALL PRIVILEGES ON TABLE public.match_team_action TO scout;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO scout;
